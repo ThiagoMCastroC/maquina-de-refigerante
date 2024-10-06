@@ -1,0 +1,46 @@
+class Automato:
+    def __init__(self):
+        # Estado inicial e estados de aceitação
+        #expressão regular: a*b* (a | ac*)
+        self.estado_inicial = 'q0'
+        self.estados_aceitacao = {'q1', 'q3', 'q4'}
+        
+        self.transicoes = {
+            'q0': {'a': 'q1'},  
+            'q1': {'a': 'q1', 'b': 'q2', 'c': 'q4'},  
+            'q2': {'b': 'q2', 'a': 'q3'},  
+            'q3': {'c': 'q4'},  
+            'q4': {'c': 'q4'}  
+        }
+        self.estado_atual = self.estado_inicial
+
+    def transitar(self, simbolo):
+        
+        if self.estado_atual in self.transicoes and simbolo in self.transicoes[self.estado_atual]:
+            self.estado_atual = self.transicoes[self.estado_atual][simbolo]
+        else:
+           
+            self.estado_atual = None
+    
+    def aceitar(self, cadeia):
+        # Reinicializa o estado atual para o estado inicial
+        self.estado_atual = self.estado_inicial
+        for simbolo in cadeia:
+            if self.estado_atual is None:
+                return False  # Rejeita a cadeia
+            self.transitar(simbolo)
+        
+        
+        return self.estado_atual in self.estados_aceitacao
+
+# Teste do autômato
+automato = Automato()
+cadenas_teste = ['a', 'b','','aa', 'ab', 'ac', 'aac', 'accc', 'aab','abac','aaaaabbbbbaccccc','aaaaabbbbbaac']
+
+for cadeia in cadenas_teste:
+    if automato.aceitar(cadeia):
+        print(f'A cadeia "{cadeia}" foi aceita.')
+    else:
+        print(f'A cadeia "{cadeia}" foi rejeitada.')
+
+        print(f'A cadeia "{cadeia}" foi rejeitada.')
