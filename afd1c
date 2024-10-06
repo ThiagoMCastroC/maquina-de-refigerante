@@ -1,0 +1,39 @@
+class AFD:
+    def __init__(self):
+        # Definindo o estado inicial e os estados de aceitação
+        self.estado_inicial = 'q0'
+        self.estados_aceitacao = {'q1','q2','q3'}
+        
+        # Definindo a tabela de transições
+        self.transicoes = {
+            'q0': {'a': 'q1', 'b':'q2'},
+            'q1': {'b':'q3','a':'q4'},
+            'q2': {'':'q2'},
+            'q3': {'b':'q3'},
+            'q4': {'a':'q4','b':'q2'}
+            
+        }
+       
+        #a*b|ab*
+
+    def processar(self, cadeia):
+        self.estado_atual = self.estado_inicial
+        for simbolo in cadeia:
+            if simbolo in self.transicoes[self.estado_atual]:
+                self.estado_atual = self.transicoes[self.estado_atual][simbolo]
+            else:
+                return False  # Se encontrar um símbolo inválido, rejeitar
+
+        # Verificar se terminou em um estado de aceitação
+        return self.estado_atual in self.estados_aceitacao
+
+# Exemplo de uso
+afd = AFD()
+
+# Teste de algumas cadeias
+cadeias = ['aaab', 'aaabab','aaa', 'bbaaa','aaab','aaabb','a','','b','abbbbb']
+for cadeia in cadeias:
+    if afd.processar(cadeia):
+        print(f"A cadeia '{cadeia}' foi aceita.")
+    else:
+        print(f"A cadeia '{cadeia}' foi rejeitada.")
